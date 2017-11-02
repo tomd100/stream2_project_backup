@@ -1,0 +1,20 @@
+
+Starting/Stopping the MySQL Server
+$ mysql-ctl start
+$ mysql-ctl stop
+$ mysql-ctl status
+
+Connecting to MySQL
+$ mysql -u $C9_USER -p
+No Password (Unless you’ve set one)
+MySQL Shell
+
+mysql> show databases;
+mysql> use <database>;
+mysql> show tables;
+mysql> exit
+mysql> desc <table>;
+mysql> select * from <table>;
+mysql> update <table> set <field> = <value> where <condition>
+mysql> delete from <table> where <condition>
+mysql> insert into <table> <field, field, field> values (<value, value, value>)
