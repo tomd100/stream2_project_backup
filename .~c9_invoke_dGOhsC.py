@@ -40,19 +40,16 @@ def parse_text():
 
             for a in album_list:
                 if line[:9] == "Bob Dylan":
-                    pos = line.find(a, 9); 
+                    pos = line[9:].find(a); 
                 else:
-                    pos = line.find(a, 3); 
-                if pos > -1: 
+                    pos = line.find(a); 
+                if pos > 0: # 0 and not -1 this is because a song may have the same name as an album
                     if len(a) > len_album:  # Some album names are also within larger album names
                         len_album = len(a);
                         album = a;
-                        
+
             if album != "":
-                rev_line = line[::-1];
-                rev_album = album[::-1];
-                rev_line = rev_line.replace(rev_album, ' ', 1);
-                line = rev_line[::-1];
+                line = line.replace(album, ' ')   ;
             
             # Line now does not include the album name.
             # Find dates
@@ -197,11 +194,11 @@ def verify_data(song_list):
             print(song)
     return
 
-song_list = parse_text();     
-upload_mongo(song_list);
+# song_list = parse_text();     
+# upload_mongo(song_list);
 
-song_list = download_mongo();
-verify_data(song_list);
+# song_list = download_mongo();
+# verify_data(song_list);
 
 
 

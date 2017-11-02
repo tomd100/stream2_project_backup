@@ -39,8 +39,8 @@ def parse_for_albums():
                     album_pos = x + 1
                     album_name = line[album_pos:];
                     album_name = album_name.strip();
-                    if album_name == "Another Side Of Bob Dylan Jul 04, 1978 Jul 08, 2012 26":
-                        print(line);
+                    # if album_name == "Another Side Of Bob Dylan Jul 04, 1978 Jul 08, 2012 26":
+                    #     print(line);
                     album_set.add(album_name);
                 x += 1
             
@@ -90,7 +90,7 @@ def check_for_other_albums():
     outFile.close();
     return;
 
-album_set_1 = parse_for_albums()     
+parse_for_albums()     
 
 check_for_other_albums()  
 print("check complete")
