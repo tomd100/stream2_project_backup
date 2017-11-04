@@ -7,7 +7,7 @@ def parse_for_albums():
     album_set = set();
     album_list = [];
 
-    with open("./text_files/bd_web_page_copy.txt", 'r') as inFile:
+    with open("../text_files/bd_web_page_copy.txt", 'r') as inFile:
         
         upper = "[A-Z]"
         lower = "[a-z]"
@@ -53,7 +53,7 @@ def parse_for_albums():
     album_list.sort()
     
     # output album list to file.
-    outFile = open("./text_files/album_list.txt", "+w")
+    outFile = open("../text_files/album_list.txt", "+w")
     for x, album in enumerate(album_list):
         outFile.write(album);
         if x < len(album_list) - 1:
@@ -68,15 +68,15 @@ def check_for_other_albums():
     
     album_list = [];
 
-    with open("./text_files/album_list.txt", "r") as albumFile:
+    with open("../text_files/album_list.txt", "r") as albumFile:
         for line in albumFile:
             line = line[:-1]
             album_list.append(line);
     albumFile.close();
         
-    outFile = open("./text_files/missing_albums.txt", "+w");
+    outFile = open("../text_files/missing_albums.txt", "+w");
     
-    with open("./text_files/bd_web_page_copy.txt", 'r') as inFile:
+    with open("../text_files/bd_web_page_copy.txt", 'r') as inFile:
         for line in inFile:
             pos = -1;
             found = 0;

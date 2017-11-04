@@ -1,0 +1,10 @@
+
+
+h1{
+    color:black;    
+}
+
+.dc-chart g.row text {
+    /*fill: #020202;*/
+    font-size: 20px;
+}

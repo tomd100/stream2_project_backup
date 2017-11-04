@@ -1,3 +1,6 @@
 .c9/
 node_modules/
+bower_components/
+parse_data/auth.py
 auth.py
+auth/

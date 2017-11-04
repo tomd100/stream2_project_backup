@@ -1,0 +1,20 @@
+{
+  "name": "workspace",
+  "homepage": "https://github.com/tomd100/stream2_project",
+  "authors": [
+    "Tom Davy <tomd200@mac.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}

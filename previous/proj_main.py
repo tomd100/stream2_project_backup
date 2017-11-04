@@ -1,25 +1,21 @@
 from flask import Flask, request, render_template
 from pymongo import MongoClient
-import os
-import tweepy
 import json
 
 from auth import get_api, MONGODB_URI
 from add_mongo import serachTwitter
 
-MONGO_DB_NAME = "tweets"
+   
+database_name = "stream2_project";
+collection_name= "bob_dylan_songs";
 
-def get_by_search(query, count):
-    api= get_api()
-    tweets = tweepy.Cursor(api.search, q=query).items(count)
-    
-    tweets_list = []
-    for tweet in tweets:
-        tweets_list.append(tweet._json)
-    return tweets_list
-    
+with MongoClient(MONGODB_URI) as conn:
+    db = conn[database_name];
+    collection = db[collection_name];
+    existing_collections = db.collection_names();
 
-    
+
+
 app = Flask(__name__)
 
 previous_searches = set()
