@@ -74,15 +74,14 @@ function makeGraphs(error, songs) {
     var count_numplays_measure = count_album_dim.group().reduceSum(dc.pluck('num_plays'));    
     
     dc.rowChart("#per-song-count")
-        .width(900)
-        .height(1000)
+        .width(600)
+        .height(500)
         .margins({top: 30, right: 50, bottom: 40, left: 40})
         .x(d3.scale.linear().domain([6,20]))
         .elasticX(true)
         .cap(10)
         .othersGrouper(false)
-        
-        
+
         .dimension(count_album_dim)
         .group(count_numplays_measure)
         

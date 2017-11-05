@@ -12,6 +12,7 @@ top_30_list = [];
 
 with open('text_files/top_30_tracks.csv', newline ='') as inFile:
     reader = csv.reader(inFile, delimiter = ",", quoting=csv.QUOTE_NONE)
+    next(reader, None);
     for row in reader:
         top_30_dict["position"] = row[0];
         top_30_dict["song_title"] = row[1];

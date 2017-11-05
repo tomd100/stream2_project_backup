@@ -9,7 +9,7 @@ from auth import MONGODB_URI
 mongo_db_name = "stream2_project"
 collection_name = "bob_dylan_songs"
 
-fields = {'song_title': True, 'album': True, 'album_year': True, 'first_date': True, 'last_date': True, 'num_plays': True, '_id': False}
+fields = {'song_title': True, 'song_chart_pos': True, 'album': True, 'album_year': True, 'first_date': True, 'last_date': True, 'num_plays': True, '_id': False}
 
 with MongoClient(MONGODB_URI) as conn:
     db = conn[mongo_db_name];

@@ -1,6 +1,7 @@
 import re
 from pymongo import MongoClient
 import json
+import csv
 
 from auth import MONGODB_URI
 
@@ -12,14 +13,53 @@ from auth import MONGODB_URI
 def parse_text():
     
     album_list = [];
-    song_list = []
+    
+    album_ry_dict = {};
+    album_ry_list = [];
+    
+    song_chart_dict = {};
+    song_chart_list = [];
 
-    with open("../text_files/album_list.txt", "r") as albumFile:
-        for line in albumFile:
+    song_list = [];
+    
+    #--------------------------------------------------------------------------- 
+    
+    # Album list
+    with open("../text_files/album_list.txt", "r") as inFile:
+        for line in inFile:
             line = line[:-1]    # remove end-of-line char
             album_list.append(line);
-    albumFile.close();
+    inFile.close();
+    
+    # Album release year
+    with open("../text_files/album_release_years.txt", "r") as inFile:
+        for line in inFile:
+            line = line[:-1]    # remove end-of-line char
+            pos = line.find("(");
+            album_name = line[:pos];
+            album_name = album_name.strip();
+            album_ry_dict["album"] = album_name;
+            
+            album_year = line[pos:]
+            album_year = album_year[1:5]
+            album_ry_dict["year"] = album_year;
+            
+            album_ry_list.append(album_ry_dict.copy());
+            
+    inFile.close();
+    
+    # Song chart position
+    with open('../text_files/top_30_tracks.csv', newline ='') as inFile:
+        for line in inFile:
+            line = line.split(",",1);
+            song_chart_dict["pos"] = line[0].strip();
+            song_chart_dict["song"]  = line[1].strip();
+            
+            song_chart_list.append(song_chart_dict.copy());            
+    inFile.close();
 
+    #---------------------------------------------------------------------------     
+    
     with open("../text_files/bd_web_page_copy.txt", 'r') as inFile:
         
         for line in inFile:
@@ -76,11 +116,16 @@ def parse_text():
             if album == "":
                 album_year = "";
             else:
-                album_year = get_album_release_year(album);
+                album_year = get_album_release_year(album, album_ry_list);
+
+        #----------------------------------------------------------------------- 
+            # Search for song ranking 
+            song_chart_pos = get_song_chart_pos(song_title, song_chart_list);
 
         #----------------------------------------------------------------------- 
             
             # print("song: {0}".format(song_title));
+            # print("song_chart_pos: {0}".format(song_chart_pos));
             # print("album: {0}".format(album));
             # print("album_year: {0}".format(album_year));
             # print("first date: {0}".format(first_date));
@@ -89,6 +134,7 @@ def parse_text():
             # print("\n")
     
             song['song_title'] = song_title;
+            song['song_chart_pos'] = song_chart_pos;
             song['album'] = album;
             song['album_year'] = album_year;
             song["first_date"] = first_date;
@@ -202,27 +248,29 @@ def get_album(line, album_list):
 
 # ------------------------------------------------------------------------------
 
-def get_album_release_year(album):
+def get_album_release_year(album, album_ry_list):
     
     album_year = ""
     
-    with open("../text_files/album_release_years.txt", "r") as albumFile:
-        for line in albumFile:
-            line = line[:-1]    # remove end-of-line char
-            pos = line.find("(");
-            album_info_name = line[:pos];
-            album_info_name = album_info_name.strip();
-            
-            album_info_year = line[pos:]
-            album_info_year = album_info_year[1:5]
-            
-            if album_info_name == album:
-                album_year = album_info_year;
-        albumFile.close();
+    for album_ry in album_ry_list:
+        if album_ry["album"].lower() == album.lower():
+            album_year = album_ry["year"];
     
-    return album_year;        
-                
-# ------------------------------------------------------------------------------                
+    return album_year;
+    
+# ------------------------------------------------------------------------------
+
+def get_song_chart_pos(song_title, song_chart_list):
+    
+    song_chart_pos = "";
+    
+    for song_chart in song_chart_list:
+        if song_chart["song"].lower() == song_title.lower():
+            song_chart_pos = song_chart["pos"];
+
+    return song_chart_pos;
+
+# ------------------------------------------------------------------------------
 
 def upload_mongo(song_list):
     
@@ -298,7 +346,7 @@ def verify_data(song_list):
             song_list_import.append(line.strip());
     songFile.close();
     
-    with open("../text_files/top_30_bd_tracks.txt", "r") as topFile:
+    with open("../text_files/top_30_tracks.csv", "r") as topFile:
         for line in topFile:
             line = line.split(",",1)
             top_30_list.append(line[1].strip());
