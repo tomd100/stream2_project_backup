@@ -70,8 +70,6 @@ function makeGraphs(error, songs) {
     });    
     
 
-
-    
     var count_album_dim = ndx.dimension(dc.pluck('album'));
     var count_numplays_measure = count_album_dim.group().reduceSum(dc.pluck('num_plays'));    
     

@@ -18,7 +18,7 @@ app = Flask(__name__)
 dbs_name = os.environ.get('mongo_db_name','stream2_project')
 collection_name = os.environ.get('mongo_collection_name','bob_dylan_songs')
 
-fields = {'song_title': True, 'album': True, 'first_date': True, 'last_date': True, 'num_plays': True, '_id': False}
+fields = {'song_title': True, 'album': True, 'album_year': True, 'first_date': True, 'last_date': True, 'num_plays': True, '_id': False}
 
 @app.route("/")
 def index():
