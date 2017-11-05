@@ -17,7 +17,6 @@ with open('text_files/top_30_tracks.csv', newline ='') as inFile:
         top_30_dict["song_title"] = row[1];
         top_30_list.append(top_30_dict.copy());
 
-
 with MongoClient(MONGODB_URI) as conn:
     db = conn[mongo_db_name];
     collection = db[collection_name];

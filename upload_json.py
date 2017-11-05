@@ -9,16 +9,16 @@ from auth import MONGODB_URI
 mongo_db_name = "stream2_project"
 collection_name = "bob_dylan_songs"
 
-fields = {'song_title': True, 'album': True, 'first_date': True, 'last_date': True, 'num_plays': True, '_id': False}
+with open("bob_dylan_songs.json", "r") as inFile:
+    song_list = json.load(inFile)
+
+song_list = list(song_list);
 
 with MongoClient(MONGODB_URI) as conn:
     db = conn[mongo_db_name];
     collection = db[collection_name];
     collection.drop();
-    song_list = collection.find(projection=fields, limit=55000);
+    collection.insert_many(song_list);
 
-song_list = list(song_list);
+
     
-outFile = open("bob_dylan_songs.json", "+w");
-outFile.write(json.dumps(song_list));
-outFile.close();

@@ -64,7 +64,6 @@ def parse_text():
             
             # line is left with just album (if it exists) and song title
         #----------------------------------------------------------------------- 
-        
             # Search for album and remove if exists
             album = get_album(line, album_list);
             if album == "":
@@ -73,9 +72,17 @@ def parse_text():
                 song_title = line[:-len(album)];
 
         #----------------------------------------------------------------------- 
+            # Search for album release year 
+            if album == "":
+                album_year = "";
+            else:
+                album_year = get_album_release_year(album);
+
+        #----------------------------------------------------------------------- 
             
             # print("song: {0}".format(song_title));
             # print("album: {0}".format(album));
+            # print("album_year: {0}".format(album_year));
             # print("first date: {0}".format(first_date));
             # print("last date: {0}".format(last_date));
             # print("num plays: {0}".format(num_plays));
@@ -83,6 +90,7 @@ def parse_text():
     
             song['song_title'] = song_title;
             song['album'] = album;
+            song['album_year'] = album_year;
             song["first_date"] = first_date;
             song["last_date"] = last_date;
             song["num_plays"] = num_plays
@@ -193,6 +201,28 @@ def get_album(line, album_list):
     return album_found;
 
 # ------------------------------------------------------------------------------
+
+def get_album_release_year(album):
+    
+    album_year = ""
+    
+    with open("../text_files/album_release_years.txt", "r") as albumFile:
+        for line in albumFile:
+            line = line[:-1]    # remove end-of-line char
+            pos = line.find("(");
+            album_info_name = line[:pos];
+            album_info_name = album_info_name.strip();
+            
+            album_info_year = line[pos:]
+            album_info_year = album_info_year[1:5]
+            
+            if album_info_name == album:
+                album_year = album_info_year;
+        albumFile.close();
+    
+    return album_year;        
+                
+# ------------------------------------------------------------------------------                
 
 def upload_mongo(song_list):
     

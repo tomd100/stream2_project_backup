@@ -79,7 +79,7 @@ Broke Down Engine
 Brownsville Girl
 Buckets Of Rain
 Bunkhouse Theme
-Bye And Bye“Love And Theft”
+Bye And Bye
 California
 Call Letter Blues
 Can You Please Crawl Out Your Window?
@@ -108,7 +108,7 @@ Corrina, Corrina
 Country Pie
 Covenant Woman
 Crash On The Levee (Down In The Flood)
-Cry A While“Love And Theft”
+Cry A While
 Dark Eyes
 Day Of The Locusts
 Days Of 49
@@ -154,7 +154,7 @@ Farewell, Angelina
 Father Of Night
 Final Theme
 Fixin’ To Die
-Floater (Too Much To Ask)“Love And Theft”
+Floater (Too Much To Ask)
 Folsom Prison Blues
 Foot Of Pride
 Forever Young
@@ -196,11 +196,11 @@ Heart Of Mine
 Heartland
 Here Comes Santa Claus
 Hero Blues
-High Water (For Charley Patton)“Love And Theft”
+High Water (For Charley Patton)
 Highlands
 Highway 51
 Highway 61 Revisited
-Honest With Me“Love And Theft”
+Honest With Me
 Honey, Just Allow Me One More Chance
 House Carpenter
 House Of the Risin’ Sun
@@ -224,7 +224,7 @@ I Shall Be Released
 I Threw It All Away
 I Wanna Be Your Lover
 I Want You
-I Was Young When I Left Home“Love And Theft”
+I Was Young When I Left Home
 Idiot Wind
 If Dogs Run Free
 If I Were a Carpenter
@@ -302,7 +302,7 @@ Living The Blues
 Lo And Behold!
 Lock Your Door
 Lone Pilgrim
-Lonesome Day Blues“Love And Theft”
+Lonesome Day Blues
 Long Ago, Far Away
 Long And Wasted Years
 Long Distance Operator
@@ -337,10 +337,10 @@ Million Dollar Bash
 Million Miles
 Minstrel Boy
 Miss The Mississippi
-Mississippi“Love And Theft”
+Mississippi
 Mixed-Up Confusion
 Money Blues
-Moonlight“Love And Theft”
+Moonlight
 Moonshiner
 Most Likely You Go Your Way And I’ll Go Mine
 Most Of The Time
@@ -409,7 +409,7 @@ Political World
 Polka Dots and Moonbeams
 Poor Boy Blues
 Positively 4th Street
-Po’ Boy“Love And Theft”
+Po’ Boy
 Po’ Lazarus
 Precious Angel
 Precious Memories
@@ -498,8 +498,8 @@ Step It Up And Go
 Still in Town
 Stuck Inside Of Mobile With The Memphis Blues Again
 Subterranean Homesick Blues
-Sugar Baby“Love And Theft”
-Summer Days“Love And Theft”
+Sugar Baby
+Summer Days
 Suze (The Cough Song)
 Sweetheart Like You
 T.V. Talkin’ Song
@@ -577,7 +577,7 @@ Try Me Little Girl
 Tryin’ To Get To Heaven
 Tupelo
 Turkey Chase
-Tweedle Dee & Tweedle Dum“Love And Theft”
+Tweedle Dee & Tweedle Dum
 Two Soldiers
 Ugliest Girl In The World
 Unbelievable
