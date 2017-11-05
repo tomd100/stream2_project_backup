@@ -4,7 +4,6 @@ import json
 
 from auth import MONGODB_URI
 
-
 def add_album_release_year():
     
     album_list = []
@@ -28,14 +27,15 @@ def add_album_release_year():
             album_year = album_year[1:5]
             
             album_years.append((album, album_year))
-            
     albumFile.close();
     
-    album_list_lower = [a.lower() for a in album_list]
-
-    for album in album_years:
-        if album[0].lower() not in album_list_lower:
-            print(album[0], "not found")
+    outFile = open("../text_files/album_with_years.txt", "+w")
+    for album in album_list:
+        for album_year in album_years:
+            if album.lower() == album_year[0].lower():
+                outFile.write(album + "|" + album_year[1]);
+                outFile.write("\n");
+                
 add_album_release_year()    
 
     
