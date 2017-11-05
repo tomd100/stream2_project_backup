@@ -4,8 +4,9 @@ import json
 
 from auth import MONGODB_URI
 
-# from get_album_list2 import 
 
+
+# ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 
 def parse_text():
@@ -24,9 +25,7 @@ def parse_text():
         for line in inFile:
             
             line = line[:-1]; # remove end-of-line char.            
-            
-            # print(line);
-            
+
             song = {};
             
             song_title = "";
@@ -37,10 +36,7 @@ def parse_text():
             num_plays = 0;
             
         #----------------------------------------------------------------------- 
-            # Line now does not include the album name.
             # Find dates
-            
-            date_list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
             
             # Find first and second date, if they exist
             pos = find_dates(line);
@@ -51,34 +47,33 @@ def parse_text():
             else:
                 dates = line[pos:pos + 26]; 
                 dates = dates.strip();                
-                line = line.replace(dates, ' ');
+                line = line.replace(dates, " ");
                 
                 dates = dates.split(" ");
                 dates = " ".join(dates[:3]), " ".join(dates[3:]);
                 first_date = fix_date(dates[0]);
                 last_date = fix_date(dates[1]);
                 
-
+            # Line is now without the date fields
         #----------------------------------------------------------------------- 
-                # Search for album and remove if exists
-                album = get_album(line);
+            # find number of plays   
             
-
+            num_plays = get_num_plays(line);
+            line = line[:-len(num_plays)];
+            line = line.strip();
             
+            # line is left with just album (if it exists) and song title
         #----------------------------------------------------------------------- 
-                 # grab chars befre the first space from end    
-            
-                rev_line = line[::-1];      # reverse the line
-                end_chars = rev_line.split(" ",1);
-    
-            if end_chars[0].isdigit():
-                num_plays = int(end_chars[0][::-1]);
-                song_title = end_chars[1][::-1].strip();
+        
+            # Search for album and remove if exists
+            album = get_album(line, album_list);
+            if album == "":
+                song_title = line;
             else:
-                num_plays = 0;
-                song_title = rev_line[1:][::-1].strip();    # strip off 0 char and reverse
-            
+                song_title = line[:-len(album)];
+
         #----------------------------------------------------------------------- 
+            
             # print("song: {0}".format(song_title));
             # print("album: {0}".format(album));
             # print("first date: {0}".format(first_date));
@@ -100,7 +95,8 @@ def parse_text():
     
     inFile.close()
     return song_list
-
+    
+# ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 
 def find_dates(line):
@@ -130,7 +126,6 @@ def find_dates(line):
 
 # ------------------------------------------------------------------------------
 
-
 def fix_date(date):
     date_list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
@@ -153,30 +148,51 @@ def fix_date(date):
 
     return new_date;
 
-    
 # ------------------------------------------------------------------------------
 
-def return_album(line):
-    pos = -1;
-    len_album = 0;
-
-    for a in album_list:
-        if line[:9] == "Bob Dylan":
-            pos = line.find(a, 9); 
-        else:
-            pos = line.find(a, 3); 
-        if pos > -1: 
-            if len(a) > len_album:  # Some album names are also within larger album names
-                len_album = len(a);
-                album = a;
-                
-    if album != "":
-        rev_line = line[::-1];
-        rev_album = album[::-1];
-        rev_line = rev_line.replace(rev_album, ' ', 1);
-        line = rev_line[::-1];
+def get_num_plays(line):
     
-    return album
+    pos = -1;
+    num_plays = "";
+    first_part = "";
+    
+    rev_line = line[::-1];
+    first_char = rev_line[0];
+    
+    pos = rev_line.find(" ");
+    if pos > -1:
+        first_part = rev_line[:pos];
+        first_part = first_part.strip();
+        if first_part.isdigit() and len(first_part) <= 4:
+            num_plays = first_part[::-1];
+        else:
+            num_plays = "0";
+    else: 
+        num_plays = "0";
+
+    return num_plays;
+
+# ------------------------------------------------------------------------------
+
+def get_album(line, album_list):
+    
+    pos = -1;
+    album_found = "";
+    len_album = 0;
+    
+    rev_line = line[::-1];
+
+    for album in album_list:
+        rev_album = album[::-1];
+        pos = rev_line.find(rev_album);
+        if pos == 0:                    # Album name must start at the beginning of rev_line
+            if len(album) > len_album:  # Some album names are also within larger album names
+                len_album = len(album);
+                album_found = album;
+                
+    return album_found;
+
+# ------------------------------------------------------------------------------
 
 def upload_mongo(song_list):
     
@@ -212,6 +228,7 @@ def download_mongo():
         
     return song_list
 
+# ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 
 def verify_data(song_list):
@@ -261,13 +278,15 @@ def verify_data(song_list):
         if song not in song_list_import:
             print(song)
     return
+
+# ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 
 song_list = parse_text();     
-# upload_mongo(song_list);
+upload_mongo(song_list);
 
-# song_list = download_mongo();
-# verify_data(song_list);
+song_list = download_mongo();
+verify_data(song_list);
 
 
 

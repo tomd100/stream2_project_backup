@@ -1,9 +1,22 @@
 
-date_list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-line = "Tangled Up In BlueBlood On The Tracks Nov 13, 1975 Oct 29, 2017 1633";
+# from parse_data/parse_song_list import get_num_plays;
 
-for date in date_list:
-    date = " " + date + " ";
-    print(line.find(date));
-    
-s="abc"
+
+
+date_list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+line = "Miss The MississippiThe Bootleg Series, Vol 8: Tell Tale Signs";
+rev_line = line[::-1]
+
+album = "The Bootleg Series, Vol 8: Tell Tale Signs"
+rev_album = album[::-1]
+
+pos = rev_line.find(rev_album)
+
+t_list = []
+t = (album, "1965")
+
+a = "“Love And Theft”"
+print(a.lower())
+
+
