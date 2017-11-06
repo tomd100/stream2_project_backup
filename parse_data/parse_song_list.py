@@ -262,11 +262,13 @@ def get_album_release_year(album, album_ry_list):
 
 def get_song_chart_pos(song_title, song_chart_list):
     
-    song_chart_pos = "";
+    song_chart_pos = 0;
     
     for song_chart in song_chart_list:
         if song_chart["song"].lower() == song_title.lower():
             song_chart_pos = song_chart["pos"];
+        else:
+            song_chart_pos = "-1";
 
     return song_chart_pos;
 

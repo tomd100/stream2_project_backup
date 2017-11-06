@@ -82,6 +82,22 @@
 <!--*************************************************************************-->
 <section>
     <div class="container-fluid">
+        
+        <div class="col-lg-12">
+            
+            <div class="col-lg-offset-2 col-lg-3" style="padding: 20px">
+                <h6>Graph Title</h6>
+                <div id="chart4"></div>
+            </div>
+            
+        </div>
+
+    </div>
+</section>
+
+<!--*************************************************************************-->
+<section>
+    <div class="container-fluid">
         <div class="col-lg-12">
             <div class="col-lg-offset-2 col-lg-3" style="padding: 20px">
                 <div id="select1">
@@ -155,13 +171,30 @@ function makeGraphs(error, songs) {
         .group(count_numplays_song)
         
         // .render();        
+// -----------------------------------------------------------------------------
 
+    var song_chart_dim = ndx.dimension(function(d) {if(d.song_chart_pos > -1) {return d.song_title};});
+    var song_chart_pos = song_chart_dim.group().reduceSum(function(d) {if(d.song_chart_pos != -1) {return d.num_plays};});
+    
+  dc.rowChart("#chart3")
+        .width(600)
+        .height(500)
+        .margins({top: 30, right: 50, bottom: 40, left: 40})
+        .x(d3.scale.linear().domain([6,20]))
+        .elasticX(true)
+        // .cap(10)
+        // .othersGrouper(false)
+
+        .dimension(song_chart_dim)
+        .group(song_chart_pos)
+        
+        // .render();        
 // -----------------------------------------------------------------------------
 
     var album_year_dim = ndx.dimension(dc.pluck('album_year'));
     var count_numplays_date = album_year_dim.group().reduceSum(function(d) {if (d.num_plays > 0) {return d.num_plays};});    
 
-    dc.barChart("#chart3")
+    dc.barChart("#chart4")
         .width(900)
         .height(500)
         .margins({top: 30, right: 50, bottom: 40, left: 40})

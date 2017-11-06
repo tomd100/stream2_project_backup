@@ -4,12 +4,12 @@ h1{
     color:blue;    
 }
 
-.dc-chart g.row text {
+#chart1.dc-chart g.row text {
     font-size: 14px;
     fill: #776621;
 }
 
-#chart3 .x.axis text {
+#chart4 .x.axis text {
   text-anchor: end !important;
   transform: rotate(-45deg);
 }
