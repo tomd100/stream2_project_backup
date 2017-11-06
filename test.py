@@ -1,22 +1,22 @@
+from flask import Flask
+from flask import render_template
+from pymongo import MongoClient
+import json
+import os
 
-# from parse_data/parse_song_list import get_num_plays;
+from auth import MONGODB_URI
 
+mongo_db_name = "stream2_project"
+collection_name = "bob_dylan_songs"
 
+fields = {'song_title': True, 'song_chart_pos': True, 'album': True, 'album_year': True, 'first_date': True, 'last_date': True, 'num_plays': True, '_id': False}
 
-date_list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+with MongoClient(MONGODB_URI) as conn:
+    db = conn[mongo_db_name];
+    collection = db[collection_name];
+    song_list = collection.find(projection=fields, limit=55000);
 
-line = "Miss The MississippiThe Bootleg Series, Vol 8: Tell Tale Signs";
-rev_line = line[::-1]
-
-album = "The Bootleg Series, Vol 8: Tell Tale Signs"
-rev_album = album[::-1]
-
-pos = rev_line.find(rev_album)
-
-t_list = []
-t = (album, "1965")
-
-a = "“Love And Theft”"
-print(a.lower())
-
-
+song_list = list(song_list);
+for song in song_list:
+    if not song["last_date"][:1].isdigit() and song["last_date"] != "" :
+        print(song["last_date"])

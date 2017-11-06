@@ -1,10 +1,15 @@
 
 
 h1{
-    color:black;    
+    color:blue;    
 }
 
 .dc-chart g.row text {
-    /*fill: #020202;*/
-    font-size: 10px;
+    font-size: 14px;
+    fill: #776621;
+}
+
+#chart3 .x.axis text {
+  text-anchor: end !important;
+  transform: rotate(-45deg);
 }

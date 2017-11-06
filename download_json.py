@@ -17,6 +17,7 @@ with MongoClient(MONGODB_URI) as conn:
     song_list = collection.find(projection=fields, limit=55000);
 
 song_list = list(song_list);
+
     
 outFile = open("bob_dylan_songs.json", "+w");
 outFile.write(json.dumps(song_list));

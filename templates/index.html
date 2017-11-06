@@ -40,9 +40,8 @@
         <div class="col-lg-12">
             
             <div class="col-lg-offset-2 col-lg-3" style="padding: 20px">
-                <!--<h4>Song List</h4>-->
-                <h6>List of Songs</h6>
-                <div id="per-song-count"></div>
+                <h6>Graph Title</h6>
+                <div id="chart1"></div>
             </div>
             
         </div>
@@ -50,30 +49,81 @@
     </div>
 </section>
 <!--*************************************************************************-->
-
-<script>
+<section>
+    <div class="container-fluid">
     
-// -----------------------------------------------------------------------------
-  
+        <div class="col-lg-12">
+            
+            <div class="col-lg-offset-2 col-lg-3" style="padding: 20px">
+                <h6>Graph Title</h6>
+                <div id="chart2"></div>
+            </div>
+            
+        </div>
+
+    </div>
+</section>
+<!--*************************************************************************-->
+<section>
+    <div class="container-fluid">
+        
+        <div class="col-lg-12">
+            
+            <div class="col-lg-offset-2 col-lg-3" style="padding: 20px">
+                <h6>Graph Title</h6>
+                <div id="chart3"></div>
+            </div>
+            
+        </div>
+
+    </div>
+</section>
+
+<!--*************************************************************************-->
+<section>
+    <div class="container-fluid">
+        <div class="col-lg-12">
+            <div class="col-lg-offset-2 col-lg-3" style="padding: 20px">
+                <div id="select1">
+                    <div>
+                    <h6>Graph Title</h6>                
+                    <a class='reset'
+                        href=''
+                        style='visibility: hidden;'>reset</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--*************************************************************************-->
+<script>    
+
 queue()
     .defer(d3.json, "../bob_dylan_songs.json")
     .await(makeGraphs);
 
 function makeGraphs(error, songs) {
 
-    var ndx = crossfilter(songs);      
-    
-    var parseDate = d3.time.format("%mmm /%dd, /%yyyy").parse;
-    songs.forEach(function(d){
-        d.first_date = parseDate(d.first_date);
-        console.log(d.first_date)
-    });    
-    
+    var ndx = crossfilter(songs);  
 
-    var count_album_dim = ndx.dimension(dc.pluck('album'));
-    var count_numplays_measure = count_album_dim.group().reduceSum(dc.pluck('num_plays'));    
+    // var dateFormat = d3.time.format("%d/%m/%y").parse;
+    // var yearFormat = d3.time.format("%yyyy").parse;
     
-    dc.rowChart("#per-song-count")
+    // songs.forEach(function(d){
+    //     d.first_date = dateFormat(d.first_date);
+    //     d.last_date = dateFormat(d.last_date); 
+    //     d.album_year = yearFormat(d.album_year);
+    // });    
+    
+// -----------------------------------------------------------------------------
+
+    var album_dim = ndx.dimension(dc.pluck('album'));
+    var count_numplays_album = album_dim.group().reduceSum(dc.pluck('num_plays'));    
+
+
+    dc.rowChart("#chart1")
         .width(600)
         .height(500)
         .margins({top: 30, right: 50, bottom: 40, left: 40})
@@ -82,34 +132,66 @@ function makeGraphs(error, songs) {
         .cap(10)
         .othersGrouper(false)
 
-        .dimension(count_album_dim)
-        .group(count_numplays_measure)
+        .dimension(album_dim)
+        .group(count_numplays_album)
         
-        .render();
-        
-        // .width(900)
-        // .height(500)
-        // .margins({top: 30, right: 50, bottom: 40, left: 40})
-        // .dimension(count_album_dim)
-        // .group(count_numplays_measure)
-        // .transitionDuration(500)
-        
-        // .x(d3.scale.ordinal())
-        // .xUnits(dc.units.ordinal)
-        
-        // .xAxisLabel("Song")
-        // .yAxisLabel("Number")
-        // .yAxis().ticks(20);
-        
-    // dc.renderAll();    
-}
+        // .render();
 
 // -----------------------------------------------------------------------------
 
+    var song_dim = ndx.dimension(dc.pluck('song_title'));
+    var count_numplays_song = song_dim.group().reduceSum(dc.pluck('num_plays'));    
+    
+   dc.rowChart("#chart2")
+        .width(600)
+        .height(500)
+        .margins({top: 30, right: 50, bottom: 40, left: 40})
+        .x(d3.scale.linear().domain([6,20]))
+        .elasticX(true)
+        .cap(10)
+        .othersGrouper(false)
 
+        .dimension(song_dim)
+        .group(count_numplays_song)
+        
+        // .render();        
 
+// -----------------------------------------------------------------------------
 
+    var album_year_dim = ndx.dimension(dc.pluck('album_year'));
+    var count_numplays_date = album_year_dim.group().reduceSum(function(d) {if (d.num_plays > 0) {return d.num_plays};});    
 
+    dc.barChart("#chart3")
+        .width(900)
+        .height(500)
+        .margins({top: 30, right: 50, bottom: 40, left: 40})
+        .dimension(album_year_dim)
+        .group(count_numplays_date)
+        .transitionDuration(500)
+        .x(d3.scale.ordinal())
+        .xUnits(dc.units.ordinal)
+        .elasticX(true)
+        .xAxisLabel("")
+        .yAxisLabel("")
+        .yAxis().ticks(20)
+        
+// -----------------------------------------------------------------------------
+
+    var songSelect = ndx.dimension(function(d) {if (d.num_plays > 0 && d.album != "") {return d.album};})
+    var count_numplays_song = songSelect.group().reduceSum(dc.pluck('num_plays'));    
+    
+    dc.selectMenu('#select1')
+        .dimension(songSelect)
+        .group(count_numplays_song)
+        .filterAll()
+        .controlsUseVisibility(true);
+        
+// -----------------------------------------------------------------------------
+
+    dc.renderAll();
+}
+
+// -----------------------------------------------------------------------------
 
 </script>
 <!--*************************************************************************-->
