@@ -14,8 +14,18 @@ h1{
     fill: black;
 }
 
+#chart3.dc-chart g.row text {
+    font-size: 14px;
+    fill: black;
+}
+
+#chart3 .x.axis text {
+  text-anchor: end !important;
+  transform: rotate(-45deg);
+}
 
 #chart4 .x.axis text {
   text-anchor: end !important;
   transform: rotate(-45deg);
 }
+

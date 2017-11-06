@@ -5,8 +5,6 @@ import csv
 
 from auth import MONGODB_URI
 
-
-
 # ------------------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 
@@ -121,7 +119,7 @@ def parse_text():
         #----------------------------------------------------------------------- 
             # Search for song ranking 
             song_chart_pos = get_song_chart_pos(song_title, song_chart_list);
-
+            
         #----------------------------------------------------------------------- 
             
             # print("song: {0}".format(song_title));
@@ -262,14 +260,12 @@ def get_album_release_year(album, album_ry_list):
 
 def get_song_chart_pos(song_title, song_chart_list):
     
-    song_chart_pos = 0;
+    song_chart_pos = "-1";
     
     for song_chart in song_chart_list:
         if song_chart["song"].lower() == song_title.lower():
             song_chart_pos = song_chart["pos"];
-        else:
-            song_chart_pos = "-1";
-
+            
     return song_chart_pos;
 
 # ------------------------------------------------------------------------------

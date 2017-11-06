@@ -118,13 +118,16 @@
 
 queue()
     .defer(d3.json, "../bob_dylan_songs.json")
+    // .defer(d3.json, "../top_30_songs.json")
+    
     // .defer(d3.json, "/songs")
     .await(makeGraphs);
 
 function makeGraphs(error, songs) {
 
-    var ndx = crossfilter(songs);  
-
+    var ndx = crossfilter(songs)
+        // ndx_top_30 = crossfilter(top_30_songs)
+    
     // var dateFormat = d3.time.format("%d/%m/%y").parse;
     // var yearFormat = d3.time.format("%yyyy").parse;
     
@@ -173,31 +176,28 @@ function makeGraphs(error, songs) {
         // .render();        
 // -----------------------------------------------------------------------------
 
-    function top_30_only(source_group) {
-        return {
-            all:function () {
-                return source_group.all().filter(function(d) {
-                    return d.song_chart_pos != -1;
-                });
-            }
-        };
-    }
-    
-    var song_chart_dim = ndx.dimension(function(d) {return d.song_title});
+    var song_chart_dim = ndx.dimension(function(d) {if (d.song_chart_pos != -1) {return d.song_title};});
     var song_chart_pos = song_chart_dim.group().reduceSum(function(d) {return d.num_plays});
-    var top_30_songs = top_30_only(song_chart_pos)
     
-    dc.rowChart("#chart3")
-        .width(600)
-        .height(500)
-        .margins({top: 30, right: 50, bottom: 40, left: 40})
-        .x(d3.scale.linear().domain([6,20]))
-        .elasticX(true)
-        .cap(10)
-        .othersGrouper(false)
+    dc.barChart("#chart3")
+        .width(900)
+        .height(700)
+        .margins({top: 30, right: 50, bottom: 150, left: 100})
         
+        .x(d3.scale.ordinal())
+        .xUnits(dc.units.ordinal)
+        .transitionDuration(500)
+        
+        // .x(d3.scale.linear().domain([6,20]))
+        // .elasticX(true)
+        // .cap(10)
+        // .othersGrouper(false)
         .dimension(song_chart_dim)
-        .group(top_30_songs)
+        .group(song_chart_pos)
+        .ordering(function(d) { return d.song_chart_pos; })
+        .xAxisLabel("")
+        .yAxisLabel("")
+        .yAxis().ticks(4)
     
         // .render();        
 

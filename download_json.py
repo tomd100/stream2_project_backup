@@ -14,10 +14,9 @@ fields = {'song_title': True, 'song_chart_pos': True, 'album': True, 'album_year
 with MongoClient(MONGODB_URI) as conn:
     db = conn[mongo_db_name];
     collection = db[collection_name];
-    song_list = collection.find(projection=fields, limit=55000);
+    song_list = collection.find(projection=fields);
 
 song_list = list(song_list);
-
     
 outFile = open("bob_dylan_songs.json", "+w");
 outFile.write(json.dumps(song_list));
