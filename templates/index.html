@@ -118,6 +118,7 @@
 
 queue()
     .defer(d3.json, "../bob_dylan_songs.json")
+    // .defer(d3.json, "/songs/")
     .await(makeGraphs);
 
 function makeGraphs(error, songs) {

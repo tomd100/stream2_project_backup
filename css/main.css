@@ -9,6 +9,12 @@ h1{
     fill: #776621;
 }
 
+#chart1.dc-chart g.row text {
+    font-size: 14px;
+    fill: #776621;
+}
+
+
 #chart4 .x.axis text {
   text-anchor: end !important;
   transform: rotate(-45deg);
