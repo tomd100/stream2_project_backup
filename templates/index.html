@@ -40,7 +40,7 @@
     
         <div class="col-lg-12">
             
-            <div class="col-lg-offset-2 col-lg-3" style="padding: 20px">
+            <div class="col-lg-offset-2 col-lg-12" style="padding: 20px">
                 <h6>Graph Title</h6>
                 <div id="chart1"></div>
             </div>
@@ -57,7 +57,7 @@
     
         <div class="col-lg-12">
             
-            <div class="col-lg-offset-2 col-lg-3" style="padding: 20px">
+            <div class="col-lg-offset-2 col-lg-12" style="padding: 20px">
                 <h6>Graph Title</h6>
                 <div id="chart2"></div>
             </div>
@@ -72,16 +72,19 @@
 <section>
     <div class="container-fluid">
         <div class="col-lg-12">
-            <div class="col-lg-offset-2 col-lg-3" style="padding: 20px">
-                <div id="select1">
-                    <div>
-                    <h6>Graph Title</h6>                
-                    <a class='reset'
-                        href=''
-                        style='visibility: hidden;'>reset</a>
-                    </div>
-                </div>
-            </div>
+            
+            <div class="col-lg-offset-2 col-lg-12" style="padding: 20px">
+
+                <table id="album_table">
+                    <thead>
+                        <tr>
+                            <th>Albums </th>
+                            <th>Number Of Plays</th>
+                            <hr>
+                        </tr>
+                    </thead>
+                </table>
+            </div>    
         </div>
     </div>
 </section>
@@ -93,7 +96,7 @@
         
         <div class="col-lg-12">
             
-            <div class="col-lg-offset-2 col-lg-3" style="padding: 20px">
+            <div class="col-lg-offset-2 col-lg-12" style="padding: 20px">
                 <h6>Graph Title</h6>
                 <div id="chart3"></div>
             </div>
@@ -105,49 +108,47 @@
 
 <!--*************************************************************************-->
 
-<!--<section>-->
-<!--    <div class="container-fluid">-->
+<section>
+    <div class="container-fluid">
         
-<!--        <div class="col-lg-12">-->
+        <div class="col-lg-12">
             
-<!--            <div class="col-lg-offset-2 col-lg-3" style="padding: 20px">-->
-<!--                <h6>Graph Title</h6>-->
-<!--                <div id="chart4"></div>-->
-<!--            </div>-->
+            <div class="col-lg-offset-2 col-lg-12" style="padding: 20px">
+                <h6>Graph Title</h6>
+                <div id="chart4"></div>
+            </div>
             
-<!--        </div>-->
+        </div>
 
-<!--    </div>-->
-<!--</section>-->
+    </div>
+</section>
 
 <!--*************************************************************************-->
 <script>    
 
 queue()
     .defer(d3.json, "../bob_dylan_songs.json")
-    // .defer(d3.json, "/songs")
-    .await(makeGraphs1);
-
-queue()
     .defer(d3.json, "../top_30_songs.json")
-    // .defer(d3.json, "/top_songs")
-    .await(makeGraphs2);
+    // .defer(d3.json, "/songs")
+    .await(makeGraphs);
+
+function makeGraphs(error, bob_dylan_songs, top_30_songs) {
+    bob_dylan_Graphs(bob_dylan_songs);
+    top_30_graphs(top_30_songs);
+}
 
 
-function makeGraphs1(error, songs) {
+function bob_dylan_Graphs(bob_dylan_songs) {
 
-    var ndx = crossfilter(songs)
-
-    // ndx_top_30 = crossfilter(top_30_songs)
+    var ndx = crossfilter(bob_dylan_songs)
     
-    // var dateFormat = d3.time.format("%d/%m/%y").parse;
-    // var yearFormat = d3.time.format("%yyyy").parse;
+    var parseDate = d3.time.format("%d/%m/%Y").parse;
     
-    // songs.forEach(function(d){
-    //     d.first_date = dateFormat(d.first_date);
-    //     d.last_date = dateFormat(d.last_date); 
-    //     d.album_year = yearFormat(d.album_year);
-    // });    
+    bob_dylan_songs.forEach(function(d) {
+        d.first_date = parseDate(d.first_date);
+        d.last_date = parseDate(d.last_date);
+        d.album_year = parseInt(d.album_year);
+    });
     
 // -----------------------------------------------------------------------------
 
@@ -187,13 +188,26 @@ function makeGraphs1(error, songs) {
         
         // .render();        
         
-
 // -----------------------------------------------------------------------------
 
-    // var album_year_dim = ndx.dimension(dc.pluck('album_year'));
-    // var count_numplays_date = album_year_dim.group().reduceSum(function(d) {if (d.num_plays > 0) {return d.num_plays};});    
+// song value is the longevity of the song: last_date - first_date played. 
+// album value = average of song values within the album
 
-    // dc.barChart("#chart4")
+    var album_dim = ndx.dimension( function(d){ if (d.num_plays > 0) {return d.album;};});
+    var count_album_value = album_dim.group().reduceSum(function(d){
+        if(d.num_plays > 0) {
+            var timeDiff = Math.abs(d.last_date - d.first_date)
+            var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            d.album_total = Math.max(daysDiff, 1);
+            } else {
+                d.album_total = 0
+            };
+        return d.album_total
+        });    
+    
+    console.log(count_album_value.all());
+
+    // dc.scatterChart("#chart4")
     //     .width(900)
     //     .height(500)
     //     .margins({top: 30, right: 50, bottom: 40, left: 40})
@@ -213,55 +227,54 @@ function makeGraphs1(error, songs) {
     dc.renderAll();
 }
 
-function makeGraphs2(error, songs) {
+// -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-    var ndx = crossfilter(songs)
+function top_30_graphs(top_30_data) {
 
-    var albumSelect = ndx.dimension(function(d) {if (d.album != "" && d.song_chart_pos != "-1") {return d.album};})
-    var count_numplays_song = albumSelect.group().reduceSum(function(d) {return d.num_plays});    
+    var ndx = crossfilter(top_30_data)
 
-    albumSelect
-        .dimension(albumSelect)
-        .group(function(d) {
-            return d.value;
-        })
+    var albumSelect = ndx.dimension(function(d) {return d.album})
+    var count_numplays_song = albumSelect.group().reduceSum(function(d) {return d.num_plays}); 
+
+    group_text = function (p) { return "" };
     
-   
-        // .sortBy(function (d) { return d.value.avg })
-        // .order(d3.descending)
-    
-//     dc.selectMenu('#select1')
-//         .dimension(songSelect)
-//         .group(count_numplays_song)
-//         // .filterAll()
-//         .controlsUseVisibility(true);
+    dc.dataTable("#album_table")
+        .width(768)
+        .height(480)
+        .dimension(count_numplays_song)
+        .group(group_text)
+        .columns([function (d) { return d.key },
+                  function (d) { return d.value }])
+        .sortBy(function (d) { return d.value })
+        .order(d3.descending);
+        
                 
-// // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
     
-//     var song_chart_dim = ndx.dimension(function(d) {if (d.song_chart_pos != -1) {return d.song_title};});
-//     var song_chart_pos = song_chart_dim.group().reduceSum(function(d) {return d.num_plays});
+    var song_chart_dim = ndx.dimension(function(d) {return d.song_title});
+    var song_chart_pos = song_chart_dim.group().reduceSum(function(d) {return d.num_plays});
     
-//     dc.barChart("#chart3")
-//         .width(900)
-//         .height(700)
-//         .margins({top: 30, right: 50, bottom: 150, left: 100})
+    dc.barChart("#chart3")
+        .width(900)
+        .height(700)
+        .margins({top: 30, right: 50, bottom: 150, left: 100})
         
-//         .x(d3.scale.ordinal())
-//         .xUnits(dc.units.ordinal)
-//         .transitionDuration(500)
+        .x(d3.scale.ordinal())
+        .xUnits(dc.units.ordinal)
+        .transitionDuration(500)
         
-//         // .x(d3.scale.linear().domain([6,20]))
-//         // .elasticX(true)
-//         // .cap(10)
-//         // .othersGrouper(false)
-//         .dimension(song_chart_dim)
-//         .group(song_chart_pos)
-//         .ordering(function(d) { return d.song_chart_pos; })
-//         .xAxisLabel("")
-//         .yAxisLabel("")
-//         .yAxis().ticks(4)
-    
-//         // .render();        
+        // .x(d3.scale.linear().domain([6,20]))
+        // .elasticX(true)
+        // .cap(10)
+        // .othersGrouper(false)
+        
+        .dimension(song_chart_dim)
+        .group(song_chart_pos)
+        .ordering(function(d) { return d.song_chart_pos; })
+        .xAxisLabel("")
+        .yAxisLabel("")
+        .yAxis().ticks(4)
     
     dc.renderAll();
 }    

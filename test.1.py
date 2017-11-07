@@ -18,5 +18,5 @@ with MongoClient(MONGODB_URI) as conn:
 
 song_list = list(song_list);
 for song in song_list:
-    if song["num_plays"] != "0" :
-        print(song["first_date"], " " ,song["last_date"])
+    if song["album"] == "Self Portrait" :
+        print(song["num_plays"], song["first_date"], song["last_date"])

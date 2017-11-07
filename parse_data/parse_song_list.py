@@ -78,6 +78,7 @@ def parse_text():
             
             # Find first and second date, if they exist
             pos = find_dates(line);
+            
             if pos == 0:
                 dates = ""
                 first_date = "";
@@ -157,9 +158,12 @@ def find_dates(line):
     pos = -1;
     date_list = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
+    rev_line = line[::-1];
+    
     for date in date_list:
         date = " " + date + " ";
-        pos = line.find(date);
+        rev_date = date[::-1];
+        pos = rev_line.find(rev_date);
         if pos > -1:
             if p1 > pos or p1 == -1:
                 p1 = pos; 
@@ -167,12 +171,13 @@ def find_dates(line):
     if p1 > -1:
         for date in date_list:
             date = " " + date + " ";
-            pos = line[p1 + 1:].find(date);
+            rev_date = date[::-1];
+            pos = rev_line[p1 + 1:].find(rev_date);
             if pos > -1:
                 if p2 > pos or p2 == -1:
                     p2 = pos;
     if p2 == 12:
-        return p1 + 1;
+        return len(line) - (p1 + 17);
     else:
         return 0;
 

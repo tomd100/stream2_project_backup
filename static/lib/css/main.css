@@ -19,6 +19,10 @@ h1{
     fill: black;
 }
 
+.dc-table-column{
+    width:250px;
+}
+
 #chart3 .x.axis text {
   text-anchor: end !important;
   transform: rotate(-45deg);
