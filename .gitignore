@@ -4,7 +4,3 @@ bower_components/
 parse_data/auth.py
 auth.py
 auth/
-parse_data/
-previous/
-text_files/
-json_files/
